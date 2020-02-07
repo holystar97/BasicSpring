@@ -5,4 +5,10 @@
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 		
+		
+	<!-- root- context. xml -->	
+	<!-- 스프링 빈 (깩체 ) 등록  -->
+	
+	
+	
 </beans>
