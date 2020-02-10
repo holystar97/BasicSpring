@@ -1,82 +1,111 @@
 package kr.co.mymelon.media;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class MediaDTO {
+  private int mediano;
+  private String title;
+  private String poster;
+  private String filename;
+  private long filesize;
+  private String mview;
+  private String rdate;
+  private int mediagroupno;
+//----------------------------------------------------------------  
+  //스프링 파일 객체 멤버변수
+  //<input type='file' name='posterMF'>
+  private MultipartFile posterMF;
+  
+  //<input type='file' name='filenameMF'>
+  private MultipartFile filenameMF;
+  
+  public MultipartFile getPosterMF() {
+    return posterMF;
+  }
 
-	
-	private int mediano;
-	 private  String title;
-	  private String poster;
-	  private String filename; 
-	  private long filesize; 
-	  private String mview;   
-	  private String rdate;    
-	  private int mediagroupno;
-	  
-	  public MediaDTO() {}
+  public void setPosterMF(MultipartFile posterMF) {
+    this.posterMF = posterMF;
+  }
 
-	public int getMediano() {
-		return mediano;
-	}
+  public MultipartFile getFilenameMF() {
+    return filenameMF;
+  }
 
-	public void setMediano(int mediano) {
-		this.mediano = mediano;
-	}
+  public void setFilenameMF(MultipartFile filenameMF) {
+    this.filenameMF = filenameMF;
+  }
+//---------------------------------------------------------------  
 
-	public String getTitle() {
-		return title;
-	}
+  public MediaDTO() {}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+  public int getMediano() {
+    return mediano;
+  }
 
-	public String getPoster() {
-		return poster;
-	}
+  public void setMediano(int mediano) {
+    this.mediano = mediano;
+  }
 
-	public void setPoster(String poster) {
-		this.poster = poster;
-	}
+  public String getTitle() {
+    return title;
+  }
 
-	public String getFilename() {
-		return filename;
-	}
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
+  public String getPoster() {
+    return poster;
+  }
 
-	public long getFilesize() {
-		return filesize;
-	}
+  public void setPoster(String poster) {
+    this.poster = poster;
+  }
 
-	public void setFilesize(long filesize) {
-		this.filesize = filesize;
-	}
+  public String getFilename() {
+    return filename;
+  }
 
-	public String getMview() {
-		return mview;
-	}
+  public void setFilename(String filename) {
+    this.filename = filename;
+  }
 
-	public void setMview(String mview) {
-		this.mview = mview;
-	}
+  public long getFilesize() {
+    return filesize;
+  }
 
-	public String getRdate() {
-		return rdate;
-	}
+  public void setFilesize(long filesize) {
+    this.filesize = filesize;
+  }
 
-	public void setRdate(String rdate) {
-		this.rdate = rdate;
-	}
+  public String getMview() {
+    return mview;
+  }
 
-	public int getMediagroupno() {
-		return mediagroupno;
-	}
+  public void setMview(String mview) {
+    this.mview = mview;
+  }
 
-	public void setMediagroupno(int mediagroupno) {
-		this.mediagroupno = mediagroupno;
-	}
+  public String getRdate() {
+    return rdate;
+  }
 
-	
-}
+  public void setRdate(String rdate) {
+    this.rdate = rdate;
+  }
+
+  public int getMediagroupno() {
+    return mediagroupno;
+  }
+
+  public void setMediagroupno(int mediagroupno) {
+    this.mediagroupno = mediagroupno;
+  }
+
+  @Override
+  public String toString() {
+    return "MediaDTO [mediano=" + mediano + ", title=" + title + ", poster=" + poster + ", filename=" + filename
+        + ", filesize=" + filesize + ", mview=" + mview + ", rdate=" + rdate + ", mediagroupno=" + mediagroupno + "]";
+  }
+  
+}//class end

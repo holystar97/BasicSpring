@@ -92,7 +92,33 @@ public class MediagroupCont {
   }//deleteProc() end
 
     
+  @RequestMapping(value="/mediagroup/update.do", method=RequestMethod.GET)
+  public ModelAndView updateForm(MediagroupDTO dto) {
+      ModelAndView mav = new ModelAndView();
+      mav.setViewName("mediagroup/updateForm");
+      mav.addObject("root", Utility.getRoot());
+      mav.addObject("dto", dao.read(dto));
+      return mav;
+  }//updateForm() end
     
+
+  @RequestMapping(value="/mediagroup/update.do", method=RequestMethod.POST)
+  public ModelAndView updateProc(MediagroupDTO dto) {
+      ModelAndView mav = new ModelAndView();
+      mav.setViewName("mediagroup/msgView");
+      int cnt = dao.update(dto);
+      if(cnt == 0) {
+          mav.addObject("msg1",  "<p>미디어 그룹 수정 실패</p>");
+          mav.addObject("img",   "<p><img src='../images/fail.png'></p>");
+          mav.addObject("link1", "<input type='button' value='다시시도' onclick='javascript:history.back()'>");
+          mav.addObject("link2", "<input type='button' value='그룹목록' onclick='location.href=\"./list.do\"'>");
+      } else {
+          mav.addObject("msg1",  "<p>미디어 그룹 수정 성공</p>");
+          mav.addObject("img",   "<p><img src='../images/sound.png'></p>");
+          mav.addObject("link1", "<input type='button' value='그룹목록' onclick='location.href=\"./list.do\"'>");    
+      }
+      return mav;    
+    }//updateProc() end     
     
     
     

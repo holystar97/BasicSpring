@@ -89,13 +89,64 @@ public class MediagroupDAO {
       pstmt.setInt(1, dto.getMediagroupno());
       cnt = pstmt.executeUpdate();
     }catch(Exception e){
-      System.out.println(e.toString());
+      System.out.println("미디어그룹삭제실패: "+e);
     }finally{
       DBClose.close(con, pstmt);
     }
     return cnt;
   }//delete() end
+
   
+  public MediagroupDTO read(MediagroupDTO dto){
+
+    try{
+      con = dbopen.getConnection();
+      sql = new StringBuilder();
+      sql.append(" SELECT mediagroupno, title");
+      sql.append(" FROM mediagroup");
+      sql.append(" WHERE mediagroupno = ?");
+      pstmt = con.prepareStatement(sql.toString());
+      pstmt.setInt(1, dto.getMediagroupno());
+      rs = pstmt.executeQuery();
+      if(rs.next()){
+        dto.setMediagroupno(rs.getInt("mediagroupno"));
+        dto.setTitle(rs.getString("title"));
+      }
+      else {
+        dto = null;
+      }
+
+    }catch(Exception e){
+      System.out.println("미디어그룹상세보기실패: "+e);
+    }finally{
+      DBClose.close(con, pstmt, rs);
+    }
+    return dto;
+  }//read() end    
+
+  public int update(MediagroupDTO dto){
+    int cnt = 0;
+    try{
+      con = dbopen.getConnection();
+      sql = new StringBuilder();
+      sql.append(" UPDATE mediagroup");
+      sql.append(" SET title = ?");
+      sql.append(" WHERE mediagroupno = ?");
+      pstmt = con.prepareStatement(sql.toString());
+      pstmt.setString(1, dto.getTitle());
+      pstmt.setInt(2, dto.getMediagroupno());
+      cnt = pstmt.executeUpdate();
+
+    }catch(Exception e){
+      System.out.println("미디어그룹수정실패: "+e);
+    }finally{
+      DBClose.close(con, pstmt);
+    }
+    return cnt;
+  }//update() end
+  
+  
+
 }//class end
 
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans
-	xmlns="http://www.springframework.org/schema/mvc"
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
@@ -8,38 +7,39 @@
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
-	<!-- DispatcherServlet Context: defines this servlet's request-processing 
-		infrastructure -->
-
 	<!-- servlet-context.xml -->
-
-
+	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
 
-	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
-		up static resources in the ${webappRoot}/resources directory -->
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<!-- <resources mapping="/resources/**" location="/resources/" /> -->
-	<!-- /webapp 폴더를 frontend 단의 root 로 지정 -->
-	<default-servlet-handler />
+    <!-- /webapp폴더를 frontend단의 root로 지정 -->
+    <default-servlet-handler/>
 
-	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
-		in the /WEB-INF/views directory -->
-	<beans:bean
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<!-- 
-		어노테이션 방식으로 자동 객체가 생성되려면 해당 패키지가 스캔되어야한다 
-		예 ) Controller , @Componet
+	<!-- 파일전송이 있는 경우 스프링빈 등록
+	     ->CommonsMultipartResolver
+	     ->폼에서 전송된 파일을 읽어서 MultipartFile객체로 변환
 	 -->
+	<beans:bean id="multipartResolver"
+	            class="org.springframework.web.multipart.commons.CommonsMultipartResolver">	
+	</beans:bean>
 
-	<context:component-scan
-		base-package="kr.co.mymelon" />
-	<context:component-scan
-		base-package="net.utility" />
-
-
+	
+	<!-- 어노테이션 방식으로 자동으로 객체가
+	     생성되려면 해당 팩키지가 스캔되어야 한다
+	     예) @Controller, @Component
+	 -->	
+	<context:component-scan base-package="kr.co.mymelon" />
+	<context:component-scan base-package="net.utility" />
+	
+	
+	
 </beans:beans>
