@@ -109,6 +109,118 @@ public class MediaCont {
   }//read() end
   
   
+  @RequestMapping(value="/media/update.do", method=RequestMethod.GET)
+  public ModelAndView updateForm(MediaDTO dto) {
+      ModelAndView mav = new ModelAndView();
+      mav.setViewName("media/updateForm");
+      mav.addObject("root", Utility.getRoot());
+      mav.addObject("dto", dao.read(dto.getMediano()));    
+      return mav;
+  }//updateForm() end
+
+  
+  @RequestMapping(value="/media/update.do", method=RequestMethod.POST)
+  public ModelAndView updateProc(MediaDTO dto, HttpServletRequest req) {
+      ModelAndView mav = new ModelAndView();
+      mav.setViewName("media/msgView");
+      mav.addObject("root", Utility.getRoot());
+
+      String basePath=req.getRealPath("/media/storage");
+      //기존에 저장된 정보 가져오기
+      MediaDTO oldDTO=dao.read(dto.getMediano());
+//------------------------------------------------------
+      //파일을 수정할 것인지?
+      //1)
+      MultipartFile posterMF = dto.getPosterMF();
+      if(posterMF.getSize()>0) {
+        //포스터 파일이 전송된 경우
+        //기존 파일 삭제
+        UploadSaveManager.deleteFile(basePath, oldDTO.getPoster());
+        //신규 파일 저장
+        String poster = UploadSaveManager.saveFileSpring30(posterMF, basePath);     
+        dto.setPoster(poster);      
+
+      }else {
+        //포스터 파일을 수정하지 않는 경우
+        dto.setPoster(oldDTO.getPoster());
+      }//if end
+      
+      //2)
+      MultipartFile filenameMF = dto.getFilenameMF();
+      if(filenameMF.getSize()>0){
+        UploadSaveManager.deleteFile(basePath, oldDTO.getFilename());
+        String filename = UploadSaveManager.saveFileSpring30(filenameMF, basePath);
+        dto.setFilename(filename);             
+        dto.setFilesize(filenameMF.getSize());  
+        
+      }else {
+        dto.setFilename(oldDTO.getFilename());
+        dto.setFilesize(oldDTO.getFilesize());
+      }//if end      
+//------------------------------------------------------          
+      
+      int cnt = dao.update(dto);
+      if(cnt == 0) {
+        mav.addObject("msg1", "음원 파일 수정 실패");
+        mav.addObject("img",  "<img src='../images/fail.png'>");
+        mav.addObject("link1", "<input type='button' value='다시시도' onclick='javascript:history.back()'>");
+        mav.addObject("link2", "<input type='button' value='목록' onclick='location.href=\"./list.do?mediagroupno="+ dto.getMediagroupno()+"\"'>");
+      }
+      else {
+        mav.addObject("msg1", "음원 파일이 수정 되었습니다");
+        mav.addObject("img",  "<img src='../images/sound.png'>");
+        mav.addObject("link1", "<input type='button' value='목록' onclick='location.href=\"./list.do?mediagroupno="+ dto.getMediagroupno()+"\"'>");
+      }
+      
+      return mav;
+      
+  }//updateproc() end
+  
+  
+  
+  @RequestMapping(value="/media/delete.do", method=RequestMethod.GET)
+  public ModelAndView deleteForm(MediaDTO dto) {
+      ModelAndView mav = new ModelAndView();
+      mav.setViewName("media/deleteForm");
+      mav.addObject("root", Utility.getRoot());
+      //삭제 관련된 정보 가져오기
+      mav.addObject("dto", dao.read(dto.getMediano()));    
+      return mav;
+  }//deleteForm() end
+
+  @RequestMapping(value="/media/delete.do", method=RequestMethod.POST)
+  public ModelAndView deleteProc(MediaDTO dto, HttpServletRequest req) {
+      ModelAndView mav = new ModelAndView();
+      mav.setViewName("media/msgView");
+      mav.addObject("root", Utility.getRoot());
+      //삭제하고 하는 정보 가져오기
+      MediaDTO oldDTO = dao.read(dto.getMediano());
+      
+      int cnt = dao.delete(dto.getMediano());
+      if(cnt==0) {
+          mav.addObject("msg1",  "<p>음원파일 삭제 실패!!</p>");
+          mav.addObject("img",   "<img src='../images/fail.png'>");
+          mav.addObject("link1", "<input type='button' value='다시시도' onclick='javascript:history.back()'>");
+          mav.addObject("link2", "<input type='button' value='음원목록' onclick='location.href=\"./list.do?mediagroupno="+dto.getMediagroupno()+"\"'>");
+      }else {
+          //관련 파일 삭제
+          String basepath = req.getRealPath("/media/storage");
+          UploadSaveManager.deleteFile(basepath, oldDTO.getPoster());
+          UploadSaveManager.deleteFile(basepath, oldDTO.getFilename());       
+          mav.addObject("msg1",  "<p>음원파일이 삭제 되었습니다</p>");
+          mav.addObject("img",   "<img src='../images/sound.png'>");
+          mav.addObject("link1", "<input type='button' value='음원목록' onclick='location.href=\"./list.do?mediagroupno="+dto.getMediagroupno()+"\"'>");     
+      }//if end       
+      return mav;
+  }//deleteProc() end
+  
+  
+  
+  
+  
+  
+  
+  
 }//class end
 
 

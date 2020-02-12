@@ -121,4 +121,47 @@ public class MediaDAO {
   }//read() end
   
   
+  public int delete(int mediano) {
+    int cnt = 0;
+    try {
+      con = dbopen.getConnection();
+      sql = new StringBuffer();
+      sql.append(" DELETE FROM media");
+      sql.append(" WHERE mediano=?");  
+      pstmt = con.prepareStatement(sql.toString());
+      pstmt.setInt(1, mediano);
+      cnt = pstmt.executeUpdate();
+    }catch(Exception e){
+      System.out.println("media삭제 실패:"+e);
+    }finally{
+      DBClose.close(con, pstmt);
+    }
+    return cnt;
+  }//delete() end
+
+  public int update(MediaDTO dto) {
+    int cnt = 0; 
+
+    try {
+      con = dbopen.getConnection();
+      sql = new StringBuffer();
+      sql.append(" UPDATE media");
+      sql.append(" SET title=?, poster=?, filename=?, filesize=?");
+      sql.append(" WHERE mediano=?"); 
+      pstmt = con.prepareStatement(sql.toString());
+      pstmt.setString(1, dto.getTitle());
+      pstmt.setString(2, dto.getPoster());
+      pstmt.setString(3, dto.getFilename());
+      pstmt.setLong(4, dto.getFilesize());
+      pstmt.setInt(5, dto.getMediano());
+      cnt = pstmt.executeUpdate();
+
+    }catch(Exception e){
+      System.out.println("media수정 실패:"+e);
+    }finally{
+      DBClose.close(con, pstmt);
+    }
+    return cnt;
+  }//update() end
+  
 }//class end
